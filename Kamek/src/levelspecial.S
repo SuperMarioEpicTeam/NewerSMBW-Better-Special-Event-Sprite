@@ -1,0 +1,151 @@
+.text
+
+#include <asm_setup.S>
+
+.align 4
+.extern SlowedDownTime
+.extern updateUI
+.extern ApparentlyStartsMusic
+.extern returnTimerLeq100
+.extern returnAt8019e154
+.extern returnAt8019e140
+.extern SoundSceneMgrInstance
+.extern DoneWithMuteHurrySFXWhenRaisingTime					#801956c8
+.extern SetVolume__Q44nw4r3snd6detail10BasicSoundFfi
+# .extern DoneWithSelectiveHurryUpSFX_SaveRegs				#8019566c
+# .extern _savegpr_25
+# .extern _restgpr_25
+
+
+.global CheckForTimeUnder100
+CheckForTimeUnder100:								
+	cmpwi	r0, 100
+	bgt		TimeIsBgt100				
+
+	b		returnTimerLeq100			
+
+
+.global TimeIsBgt100
+TimeIsBgt100:
+	lis		r4, SlowedDownTime@ha			
+	lbz		r0, SlowedDownTime@l (r4)
+	cmplwi	r0, 1						
+	beq		SlowDownMusic				
+
+	b		updateUI					
+
+
+.global SlowDownMusic
+SlowDownMusic:
+	li		r0, 0						
+	stb		r0, 0xB(r31)				
+	li 		r4, 0x10
+
+	lis		r3, SoundSceneMgrInstance@ha
+	lwz		r3, SoundSceneMgrInstance@l (r3)
+	bl		ApparentlyStartsMusic		
+
+	b		updateUI					
+
+
+
+.global WhichSongAfterTimeOver100
+WhichSongAfterTimeOver100:
+	cmpwi	r0, 0
+	beq		returnNormalSpeed
+
+	lis		r3, SlowedDownTime@ha
+	lbz		r0, SlowedDownTime@l (r3)
+	cmplwi	r0, 1
+
+	li		r0, 0
+	lis		r3, SlowedDownTime@ha
+	stb		r0, SlowedDownTime@l (r3)
+	beq		returnNormalSpeed		
+
+	b		returnAt8019e140
+
+
+.global returnNormalSpeed			
+returnNormalSpeed:
+	b		returnAt8019e154
+
+
+
+# .extern ReturnHurryUpSFX						#8019ea48
+# .extern ReturnNoHurryUpSFX						#8019ea58
+
+# .global SelectiveHurryUpSFX
+# SelectiveHurryUpSFX:
+	# mr		r31, r3
+
+	# lis		r3, SlowedDownTime@ha
+	# lbz		r0, SlowedDownTime@l (r3)
+
+	# li		r5, 5
+	# li		r6, 14
+
+	# cmplwi	r0, 0
+	# bne		NoHurryUpSFX
+
+	# li		r4, 175
+	# b		ReturnHurryUpSFX
+# NoHurryUpSFX:
+	# li		r4, 1312
+	# b		ReturnNoHurryUpSFX
+
+
+
+
+# .global SelectiveHurryUpSFX_SaveRegs
+# SelectiveHurryUpSFX_SaveRegs:
+	# stwu	r1, -0x40(r1)
+	# mfspr	r0, LR
+	# stw		r0, 0x44(r1)
+	# addi	r11, r1, 0x30
+	# stfd	f31, 0x38(r1)
+	# stfd	f30, 0x30(r1)
+	# bl		_savegpr_25
+
+	# #Here we gotta add 
+	# b		DoneWithSelectiveHurryUpSFX_SaveRegs
+
+
+
+# .global SelectiveHurryUpSFX_RestRegs
+# SelectiveHurryUpSFX_RestRegs:
+	# addi	r11, r1, 0x30
+	# lfd		f31, 0x38(r1)
+	# lfd		f30, 0x30(r1)
+	# bl		_restgpr_25
+
+	# lwz		r0, 0x44(r1)
+	# mtspr	LR, r0
+	# addi	r1, r1, 0x40
+	# blr
+
+
+
+.global MuteHurrySFXWhenRaisingTime
+MuteHurrySFXWhenRaisingTime:
+	mr		r31, r3
+
+	lis		r3, SlowedDownTime@ha
+	lbz		r3, SlowedDownTime@l (r3)
+	cmplwi	r3, 0
+	beq		DontMuteHurryFX
+
+	lis		r3, Zeroooo@ha
+	lfs		f1, Zeroooo@l (r3)
+	lwz		r3, 0x900(r26)
+	li		r4, 0			# <- fade out timer???
+	bl		SetVolume__Q44nw4r3snd6detail10BasicSoundFfi
+
+DontMuteHurryFX:
+	mr		r3, r31
+	cmpwi	r3, 0
+	b		DoneWithMuteHurrySFXWhenRaisingTime
+
+.data
+Zeroooo:	.float 0.0
+.align 4
