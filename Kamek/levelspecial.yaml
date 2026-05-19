@@ -56,6 +56,12 @@ hooks:
     src_addr_pal: 0x801956c0
     target_func: 'MuteHurrySFXWhenRaisingTime'
 
+  - name: SelectHurryUpSFX                    #To prevent delays as much as possible
+    type: branch_insn
+    branch_type: bl
+    src_addr_pal: 0x8019ea48
+    target_func: 'SelectHurryUpSFX'
+
   # - name: SelectiveHurryUpSFX_SaveRegs
     # type: branch_insn
     # branch_type: b

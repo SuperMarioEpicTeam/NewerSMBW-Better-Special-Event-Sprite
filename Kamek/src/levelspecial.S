@@ -146,6 +146,41 @@ DontMuteHurryFX:
 	cmpwi	r3, 0
 	b		DoneWithMuteHurrySFXWhenRaisingTime
 
+
+
+
+
+.global SelectHurryUpSFX
+SelectHurryUpSFX:
+	#r4 is the SFX type
+	lis		r8, SlowedDownTime@ha
+	lbz		r8, SlowedDownTime@l (r8)
+	mulli	r9, r8, 2
+	lis		r7, HUSFXs@h
+	ori		r7, r7, HUSFXs@l
+	lhzx	r4, r7, r9
+
+	#r6 is (PROB) the fade out counter
+	mulli	r9, r8, 4
+	lis		r7, FadeOutCounters@h
+	ori		r7, r7, FadeOutCounters@l
+	lwzx	r6, r7, r9
+
+	li		r7, 1
+	blr
+
+
 .data
+.align 4
+
+HUSFXs:
+	.short 0xAF
+	.short 2			#SE_DEMO_OP_LAND_JR_0983f :D
+
+FadeOutCounters:
+	.long 20
+	.long 2
+
 Zeroooo:	.float 0.0
+
 .align 4
