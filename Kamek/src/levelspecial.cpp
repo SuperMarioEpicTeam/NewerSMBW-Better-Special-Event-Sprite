@@ -2,7 +2,7 @@
 #include <game.h>
 #include <dCourse.h>
 
-extern void *DebugGetCurrentPC();
+// extern void *DebugGetCurrentPC();
 
 struct LevelSpecial {
 	u32 id;			// 0x00
@@ -52,7 +52,7 @@ extern char CameraLockEnabled;
 extern VEC2 CameraLockPosition;
 extern char isLockPlayerRotation;
 
-#define time *(u32*)((GameTimer) + 0x4)
+#define GameTimeLeft *(u32*)((GameTimer) + 0x4)
 
 
 static const float GlobalSizeFloatModifications [] = {1, 0.25, 0.5, 0.75, 1.25, 1.5, 1.75, 2, 2.5, 3, 4, 5, 6, 7, 8, 10 };
@@ -140,7 +140,7 @@ bool LevelSpecial_Create(LevelSpecial *self) {
 
 bool LevelSpecial_Execute(LevelSpecial *self) {
 	if (self->keepTime > 0) {
-		time = self->keepTime; }
+		GameTimeLeft = self->keepTime; }
 
 	LevelSpecial_Update(self);
 	return true;
@@ -163,12 +163,12 @@ void LevelSpecial_Update(LevelSpecial *self) {
 		offState = (newEvState == 1) ? 1 : 0;
 
 		switch (self->type) {
-			// case 1:											// Time Freeze
+			// case 1:											// GameTimeLeft Freeze
 			// 	TimeStopFlag = self->effect * 0x100;
 			// 	break;
 				
 			case 2:											// Stop Timer
-				self->keepTime  = time;
+				self->keepTime  = GameTimeLeft;
 				break;
 		
 	
@@ -190,10 +190,10 @@ void LevelSpecial_Update(LevelSpecial *self) {
 				break;
 	
 			case 4:											// Set Time
-				OSReport("Set Time, PC: %p\n", DebugGetCurrentPC());
-				int oldTime = (time >> 0xC) - 1;
+				// OSReport("Set Time, PC: %p\n", DebugGetCurrentPC());
+				int oldTime = (GameTimeLeft >> 0xC) - 1;
 				int newTime = (self->setTime << 0xC) - 1; // Possibly - 0xFFF?
-				time = newTime;
+				GameTimeLeft = newTime;
 				if (oldTime <= 100 && newTime > 100) {
 					SlowedDownTime = true;
 				}
