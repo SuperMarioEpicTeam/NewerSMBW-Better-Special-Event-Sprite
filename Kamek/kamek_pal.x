@@ -1,4 +1,5 @@
 SECTIONS {
+	/*		LEVEL SPECIAL DX	*/
 	updateUI = 0x800e3b18;
 	ApparentlyStartsMusic = 0x8019bd90;
 	returnTimerLeq100 = 0x800e3af8;

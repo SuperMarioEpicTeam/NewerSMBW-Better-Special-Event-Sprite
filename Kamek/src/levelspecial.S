@@ -12,6 +12,7 @@
 .extern SoundSceneMgrInstance
 .extern DoneWithMuteHurrySFXWhenRaisingTime					#801956c8
 .extern SetVolume__Q44nw4r3snd6detail10BasicSoundFfi
+.extern GameTimer
 # .extern DoneWithSelectiveHurryUpSFX_SaveRegs				#8019566c
 # .extern _savegpr_25
 # .extern _restgpr_25
@@ -29,8 +30,8 @@ CheckForTimeUnder100:
 TimeIsBgt100:
 	lis		r4, SlowedDownTime@ha			
 	lbz		r0, SlowedDownTime@l (r4)
-	cmplwi	r0, 1						
-	beq		SlowDownMusic				
+	cmplwi	r0, 0						
+	bne		SlowDownMusic
 
 	b		updateUI					
 
@@ -51,17 +52,26 @@ SlowDownMusic:
 
 .global WhichSongAfterTimeOver100
 WhichSongAfterTimeOver100:
-	cmpwi	r0, 0
+	cmplwi	r0, 0
 	beq		returnNormalSpeed
 
 	lis		r3, SlowedDownTime@ha
-	lbz		r0, SlowedDownTime@l (r3)
-	cmplwi	r0, 1
+	lbz		r5, SlowedDownTime@l (r3)
 
 	li		r0, 0
 	lis		r3, SlowedDownTime@ha
 	stb		r0, SlowedDownTime@l (r3)
-	beq		returnNormalSpeed		
+
+	lis		r6, GameTimer@ha
+	lwz		r6, GameTimer@l (r6)
+	lbz		r0, 0xB(r6)
+
+	lis		r3, SoundSceneMgrInstance@ha
+	lwz		r3, SoundSceneMgrInstance@l (r3)
+	stb		r0, 0x38(r3)
+
+	cmplwi	r5, 0
+	bne		returnNormalSpeed
 
 	b		returnAt8019e140
 

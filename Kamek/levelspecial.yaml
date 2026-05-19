@@ -12,7 +12,12 @@ hooks:
     type: add_func_pointer
     src_addr_pal: 0x8097CD54
     target_func: 'LevelSpecial_Execute(LevelSpecial *)'
-        
+    
+  - name: LevelSpecial_Delete           #Bc the fast BGM Checks are probably performed before the patch below
+    type: add_func_pointer
+    src_addr_pal: 0x8097CD48
+    target_func: 'LevelSpecial_Delete(LevelSpecial *)'
+
   - name: ResetAfterLevel
     type: branch_insn
     branch_type: b

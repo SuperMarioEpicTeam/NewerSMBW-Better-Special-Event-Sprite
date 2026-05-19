@@ -20,8 +20,9 @@ struct LevelSpecial {
 	u8 effect;		// 0x3D5
 	u8 lastEvState;	// 0x3D6
 	u8 func;		// 0x3D7
-	u32 keepTime;
-	u32 setTime;
+	u32 keepTime;	// 0x3D8
+	u32 setTime;	// 0x3DC
+	bool currentSlowDownState;		//0x3E0
 };
 
 
@@ -61,6 +62,7 @@ static const float BGScaleChoices[] = {0.1f, 0.15f, 0.25f, 0.375f, 0.5f, 0.625f,
 
 bool NoMichaelBuble = false;
 bool SlowedDownTime = false;
+bool SlowedDownTimeAlt = false;
 
 void LevelSpecial_Update(LevelSpecial *self);
 bool ResetAfterLevel();
@@ -99,7 +101,7 @@ bool ResetAfterLevel(bool didItWork) {
 	BGScaleEnabled = 0;
 	CameraLockEnabled = 0;
 	isLockPlayerRotation = false;
-	SlowedDownTime = false;
+	// SlowedDownTime = false;
 	return didItWork;
 }
 
@@ -143,6 +145,12 @@ bool LevelSpecial_Execute(LevelSpecial *self) {
 		GameTimeLeft = self->keepTime; }
 
 	LevelSpecial_Update(self);
+	return true;
+}
+
+bool LevelSpecial_Delete(LevelSpecial *self) {
+	SlowedDownTime = self->currentSlowDownState;
+	SlowedDownTimeAlt = self->currentSlowDownState;
 	return true;
 }
 
@@ -195,7 +203,7 @@ void LevelSpecial_Update(LevelSpecial *self) {
 				int newTime = (self->setTime << 0xC) - 1; // Possibly - 0xFFF?
 				GameTimeLeft = newTime;
 				if (oldTime <= 100 && newTime > 100) {
-					SlowedDownTime = true;
+					self->currentSlowDownState = SlowedDownTime = SlowedDownTimeAlt = true;
 				}
 				break;
 
@@ -268,7 +276,7 @@ void LevelSpecial_Update(LevelSpecial *self) {
 				break;
 	
 			case 4:											// Mario Size
-				SlowedDownTime = false;
+				self->currentSlowDownState = false;
 				break;
 		
 			case 5:											// Global Enemy Size
