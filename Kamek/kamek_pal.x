@@ -15,6 +15,7 @@ SECTIONS {
 	ReturnSendToWm = 0x8013d8dc;
 	ReturnUpdateTimeUpAc = 0x8077c00c;
 	ReturnDontUpdateTimeUpAc = 0x8077c04c;
+	exitingStage__10dScStage_c = 0x8042a4fd;
 
 	.text : {
 		FILL (0)

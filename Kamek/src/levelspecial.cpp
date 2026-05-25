@@ -102,7 +102,6 @@ bool ResetAfterLevel(bool didItWork) {
 	CameraLockEnabled = 0;
 	isLockPlayerRotation = false;
 	// SlowedDownTime = false;
-	SlowedDownTimeAlt = false;
 	return didItWork;
 }
 

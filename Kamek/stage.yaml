@@ -1,0 +1,8 @@
+---
+
+source_files: [../src/stage.cpp]
+hooks:
+  - name: StageDelete
+    type: add_func_pointer
+    src_addr_pal: 0x8098dc3c
+    target_func: 'dScStage_c::newOnDelete(void)'
