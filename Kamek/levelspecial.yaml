@@ -67,8 +67,8 @@ hooks:
     src_addr_pal: 0x8019ea48
     target_func: 'SelectHurryUpSFX'
 
-  - name: SkipGameOverThoughSlowedDownTime
+  - name: SkipTimeUpThoughSlowedDownTime
     type: branch_insn
     branch_type: b
-    src_addr_pal: 0x8013d814
-    target_func: 'SkipGameOverThoughSlowedDownTime'
+    src_addr_pal: 0x8077c008
+    target_func: 'SkipTimeUpThoughSlowedDownTime'

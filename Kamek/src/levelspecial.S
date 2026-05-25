@@ -21,7 +21,8 @@
 .extern Player_ID
 .extern Player_Lives
 .extern SlowedDownTimeAlt
-
+.extern ReturnUpdateTimeUpAc								#8077c00c
+.extern ReturnDontUpdateTimeUpAc							#8077c04c
 
 .global CheckForTimeUnder100
 CheckForTimeUnder100:								
@@ -188,42 +189,19 @@ SelectHurryUpSFX:
 
 
 
-.global SkipGameOverThoughSlowedDownTime
-SkipGameOverThoughSlowedDownTime:
+.global SkipTimeUpThoughSlowedDownTime
+SkipTimeUpThoughSlowedDownTime:
+	beq		DontUpdateTimeUpAc
+
 	lis		r3, SlowedDownTimeAlt@ha
 	lbz		r3, SlowedDownTimeAlt@l (r3)
 	cmplwi	r3, 0
-	bne		ReturnWMEventuallyAndRestLivesManually
+	bne		DontUpdateTimeUpAc
 
 	mr		r3, r31
-	b		ContinueFromSkipGameOverThoughSlowedDownTime
-ReturnWMEventuallyAndRestLivesManually:
-	li		r4, 0
-	lis		r3, Player_ID@h
-	ori		r3, r3, Player_ID@l
-	b		LoopForSomePlayers
-
-DoCheckForIPlayer:
-	lwz		r5, 0(r3)
-	mulli	r5, r5, 4
-	lis		r6, Player_Lives@h
-	ori		r6, r6, Player_Lives@l
-	lwzx	r7, r6, r5
-
-	cmpwi	r7, 0
-	bne		PlayerHasMoreThan0Lives
-
-	li		r7, 5
-	stwx	r7, r6, r5
-
-PlayerHasMoreThan0Lives:
-	addi	r4, r4, 1
-	addi	r3, r3, 4
-LoopForSomePlayers:
-	cmpwi	r4, 4
-	blt		DoCheckForIPlayer
-
-	b		ReturnSendToWm
+	b		ReturnUpdateTimeUpAc
+DontUpdateTimeUpAc:
+	b		ReturnDontUpdateTimeUpAc
 
 .data
 .align 4

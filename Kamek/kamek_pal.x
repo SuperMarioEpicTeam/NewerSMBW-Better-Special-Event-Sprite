@@ -13,6 +13,8 @@ SECTIONS {
 	DoneWithMuteHurrySFXWhenRaisingTime = 0x801956c8;
 	ContinueFromSkipGameOverThoughSlowedDownTime = 0x8013d818;
 	ReturnSendToWm = 0x8013d8dc;
+	ReturnUpdateTimeUpAc = 0x8077c00c;
+	ReturnDontUpdateTimeUpAc = 0x8077c04c;
 
 	.text : {
 		FILL (0)
