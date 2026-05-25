@@ -16,6 +16,7 @@ SECTIONS {
 	ReturnUpdateTimeUpAc = 0x8077c00c;
 	ReturnDontUpdateTimeUpAc = 0x8077c04c;
 	exitingStage__10dScStage_c = 0x8042a4fd;
+	onDelete_orig__10dScStage_cFv = 0x80925740;
 
 	.text : {
 		FILL (0)
