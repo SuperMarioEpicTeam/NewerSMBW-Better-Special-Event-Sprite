@@ -211,7 +211,7 @@ class dScStage_c : public dScene_c {     //The dScStage_c class, handles things 
         int newOnExecute();
 
 		int onDelete_orig();
-		int newOnDelete
+		int newOnDelete();
 };
 
 
