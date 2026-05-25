@@ -102,7 +102,7 @@ bool ResetAfterLevel(bool didItWork) {
 	CameraLockEnabled = 0;
 	isLockPlayerRotation = false;
 	// SlowedDownTime = false;
-	// SlowedDownTimeAlt = false;
+	SlowedDownTimeAlt = false;
 	return didItWork;
 }
 
@@ -151,7 +151,9 @@ bool LevelSpecial_Execute(LevelSpecial *self) {
 
 bool LevelSpecial_Delete(LevelSpecial *self) {
 	SlowedDownTime = self->currentSlowDownState;
-	SlowedDownTimeAlt = self->currentSlowDownState;
+
+	// int oldTime = (GameTimeLeft >> 0xC) - 1;
+	// SlowedDownTimeAlt = oldTime < 100;
 	return true;
 }
 
@@ -203,9 +205,10 @@ void LevelSpecial_Update(LevelSpecial *self) {
 				int oldTime = (GameTimeLeft >> 0xC) - 1;
 				int newTime = (self->setTime << 0xC) - 1; // Possibly - 0xFFF?
 				GameTimeLeft = newTime;
-				if (oldTime <= 100 && newTime > 100) {
-					self->currentSlowDownState = SlowedDownTime = SlowedDownTimeAlt = true;
+				if (newTime > 100 && oldTime <= 100) {
+					self->currentSlowDownState = SlowedDownTime = true;
 				}
+				SlowedDownTimeAlt = (self->setTime <= 100);
 				break;
 
 
