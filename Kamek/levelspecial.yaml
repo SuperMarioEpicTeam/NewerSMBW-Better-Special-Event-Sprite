@@ -40,7 +40,7 @@ hooks:
     src_addr_pal: 0x80926200
     target_func: 'FuckinBubbles(void)'
 
-###GAME TIME BGM CHECKS
+###GAME TIME BGM CHECKS (AND MORE)
 ###Requested by Mone, made by Walid
 
   - name: CheckForTimeUnder100
@@ -67,14 +67,8 @@ hooks:
     src_addr_pal: 0x8019ea48
     target_func: 'SelectHurryUpSFX'
 
-  # - name: SelectiveHurryUpSFX_SaveRegs
-    # type: branch_insn
-    # branch_type: b
-    # src_addr_pal: 0x80195650
-    # target_func: 'SelectiveHurryUpSFX_SaveRegs'
-
-  # - name: SelectiveHurryUpSFX_RestRegs
-    # type: branch_insn
-    # branch_type: b
-    # src_addr_pal: 0x80195704
-    # target_func: 'SelectiveHurryUpSFX_RestRegs'
+  - name: SkipGameOverThoughSlowedDownTime
+    type: branch_insn
+    branch_type: b
+    src_addr_pal: 0x8013d814
+    target_func: 'SkipGameOverThoughSlowedDownTime'

@@ -11,6 +11,8 @@ SECTIONS {
 	ReturnFromSelectiveHurryUpSFX = 0x8019ea30;
 	DoneWithSelectiveHurryUpSFX_SaveRegs = 0x8019566c;
 	DoneWithMuteHurrySFXWhenRaisingTime = 0x801956c8;
+	ContinueFromSkipGameOverThoughSlowedDownTime = 0x8013d818;
+	ReturnSendToWm = 0x8013d8dc;
 
 	.text : {
 		FILL (0)
