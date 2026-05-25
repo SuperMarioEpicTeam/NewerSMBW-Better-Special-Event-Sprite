@@ -2,7 +2,12 @@
 #include <common.h>
 #include <stage.h>
 #include <actors.h>
+
+#ifdef __KAMEK_TIMEKEEPER_H
+#include <timekeeper.h>
+#else
 #include <gamescene.h>
+#endif
 
 extern bool SlowedDownTimeAlt;
 
