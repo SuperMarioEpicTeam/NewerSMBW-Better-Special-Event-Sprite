@@ -4,6 +4,7 @@ This is a fork of the NewerSMBW Special Event Sprite [246] , but with
 new implementations, including:
 
 - BGM fast/regular checks (when time is lower than 100, and time setter is greater than 100)
+- Disabled Game Over Screen while "Slowed Down Time?" Event is activated
 
 Other implementations may be added in the future
 
